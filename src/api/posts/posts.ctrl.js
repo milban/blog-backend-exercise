@@ -65,7 +65,25 @@ export const remove = async (ctx) => {
 };
 
 /* 포스트 수정(교체)
-PATCH /api/posts/:id
-{ title, body }
+  PATCH /api/posts/:id
+  {
+    title: '수정',
+    body: '수정 내용',
+    tags: ['수정', '태그']
+   }
  */
-export const update = (ctx) => {};
+export const update = async (ctx) => {
+  const { id } = ctx.params;
+  try {
+    const post = await Post.findByIdAndUpdate(id, ctx.request.body, {
+      new: true,
+    }).exec();
+    if (!post) {
+      ctx.status = 404;
+      return;
+    }
+    ctx.body = post;
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
