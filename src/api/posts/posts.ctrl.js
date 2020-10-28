@@ -1,4 +1,14 @@
 import Post from '../../models/post';
+import mongoose from 'mongoose';
+
+export const checkObjectId = (ctx, next) => {
+  const { id } = ctx.params;
+  if (!mongoose.isValidObjectId(id)) {
+    ctx.status = 400; // Bad Request
+    return;
+  }
+  return next();
+};
 
 /* 포스트 작성
   POST /api/posts
