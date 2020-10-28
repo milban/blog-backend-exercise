@@ -6,7 +6,7 @@
     },
     "extends": ["eslint:recommended", "plugin:prettier/recommended"],
     "parserOptions": {
-        "ecmaVersion": 6,
+        "ecmaVersion": 12,
         "sourceType": "module"
     },
     "rules": {
