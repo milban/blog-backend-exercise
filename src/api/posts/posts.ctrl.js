@@ -52,9 +52,17 @@ export const read = async (ctx) => {
 };
 
 /* 특정 포스트 제거
-DELETE /api/posts/:id
+  DELETE /api/posts/:id
  */
-export const remove = (ctx) => {};
+export const remove = async (ctx) => {
+  const { id } = ctx.params;
+  try {
+    await Post.findByIdAndRemove(id).exec();
+    ctx.status = 204; // No Content
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
 
 /* 포스트 수정(교체)
 PATCH /api/posts/:id
