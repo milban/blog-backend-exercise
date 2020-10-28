@@ -35,9 +35,21 @@ export const list = async (ctx) => {
 };
 
 /* 특정 포스터 조회
-GET /api/posts/:id
+  GET /api/posts/:id
  */
-export const read = (ctx) => {};
+export const read = async (ctx) => {
+  const { id } = ctx.params;
+  try {
+    const post = await Post.findById(id).exec();
+    if (!post) {
+      ctx.status = 404; // Not Found
+      return;
+    }
+    ctx.body = post;
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
 
 /* 특정 포스트 제거
 DELETE /api/posts/:id
