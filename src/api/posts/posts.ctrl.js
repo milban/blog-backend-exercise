@@ -1,12 +1,12 @@
 import Post from '../../models/post';
 
 /* 포스트 작성
-POST /api/posts
-{
-  title: '제목',
-  body: '내용',
-  tags: ['태그1', '태그2']
-}
+  POST /api/posts
+  {
+    title: '제목',
+    body: '내용',
+    tags: ['태그1', '태그2']
+  }
  */
 export const write = async (ctx) => {
   const { title, body, tags } = ctx.request.body;
@@ -24,9 +24,15 @@ export const write = async (ctx) => {
 };
 
 /* 포스트 목록 조회
-GET /api/posts
+  GET /api/posts
  */
-export const list = (ctx) => {};
+export const list = async (ctx) => {
+  try {
+    ctx.body = await Post.find().exec();
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
 
 /* 특정 포스터 조회
 GET /api/posts/:id
