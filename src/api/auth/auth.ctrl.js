@@ -40,7 +40,38 @@ export const register = async (ctx) => {
   }
 };
 
-export const login = async (ctx) => {};
+/*
+  POST /api/auth/login
+  {
+    username: 'milban',
+    password: 'mypass123',
+  }
+ */
+export const login = async (ctx) => {
+  const { username, password } = ctx.request.body;
+
+  if (!username || !password) {
+    ctx.status = 401; // Unauthorized
+    return;
+  }
+
+  try {
+    const user = await User.findByUsername(username);
+    if (!user) {
+      ctx.status = 401;
+      return;
+    }
+
+    const valid = await user.checkPassword(password);
+    if (!valid) {
+      ctx.status = 401;
+      return;
+    }
+    ctx.body = user.serialize();
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
 
 export const check = async (ctx) => {};
 
